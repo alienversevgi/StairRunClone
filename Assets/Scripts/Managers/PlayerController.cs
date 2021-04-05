@@ -17,12 +17,47 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private float stairInstantiateRate;
     [SerializeField] private Transform spawnPoint;
-    [SerializeField] private Rig chestRig;
+    [SerializeField] private BackpackController backpack;
+    [SerializeField] private Rig backpackRig;
 
+    private bool isEnable;
     private Rigidbody rigidbody;
     private Animator animator;
 
     private Coroutine climpStair;
+
+    #region Unity Methods
+
+    private void Update()
+    {
+        if (isEnable)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Run();
+            }
+
+            if (Input.GetMouseButtonUp(0))
+            {
+                Glide();
+            }
+
+            this.transform.position += this.transform.forward * 10 * Time.deltaTime;
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (isEnable && collision.collider.CompareTag("Ground"))
+        {
+            animator.SetTrigger("Run");
+            backpackRig.weight = 1;
+        }
+    }
+
+    #endregion
+
+    #region Public Methods
 
     public void Initialize()
     {
@@ -30,26 +65,21 @@ public class PlayerController : MonoBehaviour
         animator = this.GetComponent<Animator>();
     }
 
-    private void Update()
+    public void SetEnable(bool isEnable)
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            Run();
-        }
-
-        if (Input.GetMouseButtonUp(0))
-        {
-            Glide();
-        }
-
-        this.transform.position += this.transform.forward * 10 * Time.deltaTime;
+        this.isEnable = isEnable;
     }
+
+    #endregion
+
+    #region Private Methods
 
     private void Glide()
     {
         animator.SetTrigger("Glide");
         OnGliding?.Invoke();
-        chestRig.weight = 1;
+        PoolManager.Instance.StairPool.unavailable.ToList().ForEach(it => it.Release());
+        backpackRig.weight = 1;
         StopCoroutine(climpStair);
         SetRigidbodyProperties(false);
     }
@@ -57,7 +87,7 @@ public class PlayerController : MonoBehaviour
     private void Run()
     {
         animator.SetTrigger("Run");
-        chestRig.weight = 1;
+        backpackRig.weight = 1;
         OnRunning?.Invoke();
         climpStair = StartCoroutine(ClimpStair());
         SetRigidbodyProperties(true);
@@ -71,23 +101,26 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator ClimpStair()
     {
-        while (true) // stair count
+        while (backpack.BrickCount > 0)
         {
-            yield return new WaitForSecondsRealtime(stairInstantiateRate);
             this.transform.position = this.transform.position + new Vector3(0, STAIR_STEP_SIZE, 0);
-            chestRig.weight = 0;
+            backpackRig.weight = 0;
             //this.transform.DOMoveY(this.transform.position.y + STAIR_STEP_SIZE, .1f);
             OnStepCompleted?.Invoke(spawnPoint.position);
+            CreateStair(spawnPoint.position);
+            yield return new WaitForSecondsRealtime(stairInstantiateRate);
         }
     }
 
 
-    private void OnCollisionEnter(Collision collision)
+    private void CreateStair(Vector3 spawnPosition)
     {
-        if (collision.collider.CompareTag("Ground"))
-        {
-            animator.SetTrigger("Run");
-            chestRig.weight = 1;
-        }
+        Stair stair = PoolManager.Instance.StairPool.Allocate();
+        stair.transform.position = spawnPosition;
+        stair.gameObject.SetActive(true);
+        stair.SetReleaseAction(() => PoolManager.Instance.StairPool.Release(stair));
+        stair.Initialize();
     }
+
+    #endregion
 }

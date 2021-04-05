@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ObjectPooling
 {
-    public class Pool<T> where T : IResettable
+    public class Pool<T> where T : IPoolElement
     {
         public List<T> members = new List<T>();
         public HashSet<T> unavailable = new HashSet<T>();

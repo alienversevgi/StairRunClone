@@ -370,7 +370,7 @@ Light:
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
-  m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
@@ -714,6 +714,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stair: {fileID: 5771256217791203175, guid: 8bf1c0e74c723b14d9b12562c4a403e3, type: 3}
+  brick: {fileID: 7930178897776738815, guid: 376d7ddfd40f4c14f83d56fdb35deb57, type: 3}
 --- !u!1 &1871386511
 GameObject:
   m_ObjectHideFlags: 0
@@ -854,6 +855,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 431099042041852311, guid: 3824841224023be4a8a06fc0b4c9e65a,
+        type: 3}
+      propertyPath: backpack
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3824841224023be4a8a06fc0b4c9e65a, type: 3}

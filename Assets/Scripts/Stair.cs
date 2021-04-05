@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using ObjectPooling;
 
-public class Stair : MonoBehaviour, IResettable
+public class Stair : MonoBehaviour, IPoolElement
 {
     private Action onRelease;
     private Rigidbody rigidbody;
+    private Action releaseAction;
 
     public void Reset()
     {
@@ -19,11 +20,15 @@ public class Stair : MonoBehaviour, IResettable
         rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
     }
 
-    public void Initialize(Action onRelease)
+    public void SetReleaseAction(Action releaseAction)
+    {
+        onRelease = releaseAction;
+    }
+
+    public void Initialize()
     {
         rigidbody = this.GetComponent<Rigidbody>();
         rigidbody.isKinematic = false;
-        this.onRelease = onRelease;
     }
 
     public void Release()
