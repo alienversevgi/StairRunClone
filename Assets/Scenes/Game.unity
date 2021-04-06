@@ -251,7 +251,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &576876907
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -855,11 +855,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 431099042041852311, guid: 3824841224023be4a8a06fc0b4c9e65a,
-        type: 3}
-      propertyPath: backpack
-      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3824841224023be4a8a06fc0b4c9e65a, type: 3}

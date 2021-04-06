@@ -61,6 +61,7 @@ public class PlayerController : MonoBehaviour
 
     public void Initialize()
     {
+        backpack.Initialize();
         rigidbody = this.GetComponent<Rigidbody>();
         animator = this.GetComponent<Animator>();
     }

@@ -1129,7 +1129,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stairInstantiateRate: 0.08
   spawnPoint: {fileID: 431099041648763957}
-  backpack: {fileID: 0}
+  backpack: {fileID: 4647187642644050469}
   backpackRig: {fileID: 431099041491151002}
 --- !u!1 &431099041375929516
 GameObject:
