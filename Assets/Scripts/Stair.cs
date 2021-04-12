@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -28,7 +28,7 @@ public class Stair : MonoBehaviour, IPoolElement
     public void Initialize()
     {
         rigidbody = this.GetComponent<Rigidbody>();
-        rigidbody.isKinematic = false;
+        rigidbody.isKinematic = true;
     }
 
     public void Release()

@@ -1,13 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Tiyago1.EventManager;
 using UnityEngine;
+using System.Linq;
 
 public class BackpackController : MonoBehaviour
 {
-    public int BrickCount = int.MaxValue;
+    public bool HaveBricks => brickCount > 0;
+
     [SerializeField] private List<Transform> slotPlaceHolders;
-    [SerializeField] private Dictionary<int, List<Brick>> slots;
+    private Dictionary<int, List<Brick>> slots;
     private Vector2 currentPoint;
+    private int brickCount => slots.Sum((brick) => brick.Value.Count());
 
     public void Initialize()
     {
@@ -17,19 +21,8 @@ public class BackpackController : MonoBehaviour
             slots.Add(i, new List<Brick>());
         }
         currentPoint = new Vector2(-1, 0);
-    }
-
-    public void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            AddBrick();
-        }
-
-        if (Input.GetKey(KeyCode.Q))
-        {
-            RemoveBrick();
-        }
+        EventManager.Instance.OnCollectBrick.Register(() => AddBrick());
+        EventManager.Instance.OnReduceBrick.Register(() => RemoveBrick());
     }
 
     public void AddBrick()
@@ -45,6 +38,7 @@ public class BackpackController : MonoBehaviour
         brick.transform.SetParent(slotPlaceHolders[(int)currentPoint.x]);
         brick.transform.localPosition = new Vector3(0, currentPoint.y);
         brick.transform.localEulerAngles = Vector3.zero;
+        brick.transform.localScale = Vector3.one;
         brick.gameObject.SetActive(true);
 
         slots[(int)currentPoint.x].Add(brick);
@@ -52,7 +46,7 @@ public class BackpackController : MonoBehaviour
 
     public void RemoveBrick()
     {
-        if (currentPoint.y == -1 || currentPoint.y < 0 && currentPoint.x < 0)
+        if (!HaveBricks)
             return;
 
         Brick brick = slots[(int)currentPoint.x][(int)currentPoint.y];

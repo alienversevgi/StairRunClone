@@ -6,6 +6,7 @@ using System;
 
 public class Brick : MonoBehaviour, IPoolElement
 {
+    private Action releaseAction;
     public void Reset()
     {
         this.gameObject.SetActive(false);
@@ -13,6 +14,11 @@ public class Brick : MonoBehaviour, IPoolElement
 
     public void SetReleaseAction(Action releaseAction)
     {
-        
+        this.releaseAction = releaseAction;
+    }
+
+    public void Release()
+    {
+        this.gameObject.SetActive(false);
     }
 }
